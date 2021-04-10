@@ -2,45 +2,50 @@
 #include "stateMachines.h"
 #include "led.h"
 
-char toggle_red()		/* always toggle! */
-{
-  static char state = 0;
-
-  switch (state) {
-  case 0:
-    red_on = 1;
-    state = 1;
-    break;
+void controller(int state){
+  switch(state){
   case 1:
-    red_on = 0;
-    state = 0;
+    idle_state();
+    state = 2;
+    break;
+  case 2:
+    green_state();
+    break;
+  case 3:
+    red_state();
     break;
   }
-  return 1;			/* always changes an led */
 }
 
-char toggle_green()	/* only toggle green if red is on!  */
-{
+void idle_state(){
+  green_on = 0;
+  red_on = 0;
+  led_changed = 0;
+}
+
+void green_state(){
   char changed = 0;
-  if (red_on) {
-    green_on ^= 1;
-    changed = 1;
-  }
-  return changed;
-}
-
-
-void state_advance()		/* alternate between toggling red & green */
-{
-  char changed = 0;  
-
-  static enum {R=0, G=1} color = G;
-  switch (color) {
-  case R: red_on = 0; green_on = 1; color = G; break;
-  case G: red_on = 1; green_on = 0; color = R; break;
-  }
+  static enum {R = 0, G = 1} color = G;
+  red_on = 1;
+  color = R;
 
   changed = 1;
   led_changed = changed;
   led_update();
+}
+
+void red_state(){
+  char changed = 0;
+  static enum {R = 0, G = 1} color = G;
+  green_on = 1;
+  color = G;
+
+  changed = 1;
+  led_changed = changed;
+  led_update();
+}
+
+void state_advance()
+{
+  controller(3);
 }

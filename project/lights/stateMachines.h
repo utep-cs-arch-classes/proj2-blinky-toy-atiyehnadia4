@@ -2,6 +2,5 @@
 #define stateMachine_included
 
 void state_advance();
-void controller();
 
 #endif // included
