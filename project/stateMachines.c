@@ -14,6 +14,9 @@ void controller(int state){
   case 3:
     red_state();
     break;
+  case 4:
+    green_state();
+    red_state();
   }
 }
 
@@ -47,5 +50,5 @@ void red_state(){
 
 void state_advance()
 {
-  controller(3);
+  controller(4);
 }
