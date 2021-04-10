@@ -9,10 +9,10 @@ void controller(int state){
     idle_state();
     break;
   case 2:
-    green_state();
+    green_blink_state();
     break;
   case 3:
-    red_state();
+    red_blink_state();
     break;
   case 4:
     double_blink_state();
@@ -30,7 +30,7 @@ void idle_state(){
   led_changed = 0;
 }
 
-void green_state(){
+void green_blink_state(){
   static enum {I = 0, G = 1} color = G;
   switch(color){
   case G:
@@ -45,7 +45,7 @@ void green_state(){
   }
 }
 
-void red_state(){
+void red_blink_state(){
   static enum {I = 0, R = 1} color = R;
   switch(color){
   case R:
@@ -74,6 +74,20 @@ void double_blink_state(){
     color = R;
     break;
   }
+}
+
+void green_solid_state(){
+  static enum {G = 1} color = G;
+  green_on = 0;
+  red_on = 1;
+  color = G;
+}
+
+void red_solid_state(){
+  static enum {R = 1} color = R;
+  red_on = 1;
+  green_on = 0;
+  color = R;
 }
 
 void state_advance()
