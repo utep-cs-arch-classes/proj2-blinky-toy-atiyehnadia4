@@ -6,8 +6,10 @@
 
 static char red = 0;
 static char green = 0;
+static char both = 0;
 static int red_song_counter = 0;
 static int green_song_counter = 0;
+static int both_song_counter = 0;
 
 
 void idle_state(){
@@ -63,6 +65,13 @@ void double_blink_state(){
   }
   led_changed = 1;
   led_update();
+}
+
+void double_solid_state(){
+  static enum {RG = 2} color = RG;
+  green_on = 1;
+  red_on = 1;
+  color = RG;
 }
 
 void green_solid_state(){
@@ -232,6 +241,67 @@ void green_button_state_machine(){
   led_update();
 }
 
+void both_buzzer_song(){
+  switch(both_song_counter){
+  case 0:
+  case 1:
+  case 2:
+  case 3:
+    buzzer_set_period(750);
+    both_song_counter++;
+    break;
+  case 4:
+    buzzer_set_period(950);
+    both_song_counter++;
+    break;
+  case 5:
+    buzzer_set_period(630);
+    both_song_counter++;
+    break;
+  case 6:
+    buzzer_set_period(1260);
+    both_song_counter++;
+    break;
+  }
+}
+void change_both_button_clicks(int button){
+  switch(button){
+  case 2:
+    both = 1;
+    break;
+  case 3:
+    both = 2;
+    break;
+  default:
+    double_solid_state();
+    buzzer_set_period(0);    
+    break;
+  }
+}
+
+
+void both_button_state_machine(){
+  switch(both){
+  case 0:
+    double_solid_state();
+    change_both_button_clicks(button_clicks2);
+    break;
+  case 1:
+    double_blink_state();
+    change_both_button_clicks(button_clicks2);
+    break;
+  case 2:
+    double_blink_state();
+    both_buzzer_song();
+    change_both_button_clicks(button_clicks2);
+    break;
+  }
+
+  led_changed = 1;
+  led_update();
+}
+  
+    
 
 //void dim_state_machine(){
 //char changed = 0;

@@ -3,6 +3,6 @@
 
 void red_button_state_machine();
 void green_button_state_machine();
-void double_blink_state();
+void both_button_state_machine();
 
 #endif // included

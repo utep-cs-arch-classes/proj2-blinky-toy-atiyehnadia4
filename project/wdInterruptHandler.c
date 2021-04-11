@@ -27,7 +27,7 @@ __interrupt_vec(WDT_VECTOR) WDT(){	/* 250 interrupts/sec */
     blink_count = 0;
   }
   else if(blink_count == 30 && switch_state == 2){
-    double_blink_state();
+    both_button_state_machine();
     blink_count = 0;
   }
   else if(blink_count == 30 && switch_state == 4){
