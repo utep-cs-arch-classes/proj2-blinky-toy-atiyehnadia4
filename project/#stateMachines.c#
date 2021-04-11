@@ -6,6 +6,7 @@
 
 static char red = 0;
 static char green = 0;
+static char both = 0;
 static int red_song_counter = 0;
 static int green_song_counter = 0;
 

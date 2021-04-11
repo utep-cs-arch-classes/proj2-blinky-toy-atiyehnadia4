@@ -4,9 +4,12 @@
 
 char switch_state_down, switch_state_changed; /* effectively boolean */
 
-char switch_state = 0;
-char tempo = 0;  
-char button_clicks1, button_clicks2, button_clicks3, button_clicks4 = 0;
+char tempo = 0;
+char switch_state;
+char button_clicks1 = 0;
+char button_clicks2 = 0;
+char button_clicks3 = 0;
+char button_clicks4 = 0;
 
 
 static char 
@@ -35,10 +38,10 @@ switch_interrupt_handler()
 {
   char p2val = switch_update_interrupt_sense();
 
-  char switch1_state_down = (p2val & S1) ? 0:1;
-  char switch2_state_down = (p2val & S2) ? 0:1;
-  char switch3_state_down = (p2val & S3) ? 0:1;
-  char switch4_state_down = (p2val & S4) ? 0:1;
+  char switch1_state_down = (p2val & S1);
+  char switch2_state_down = (p2val & S2);
+  char switch3_state_down = (p2val & S3);
+  char switch4_state_down = (p2val & S4);
 
   if(switch1_state_down == 0){
     switch_state = 1;
@@ -49,7 +52,7 @@ switch_interrupt_handler()
     switch_state = 2;
     button_clicks2 += 1;
   }
-
+  
   else if(switch3_state_down == 0){
     switch_state = 3;
     button_clicks3 += 1;
@@ -60,5 +63,5 @@ switch_interrupt_handler()
     button_clicks4 += 1;
   }
   switch_state_changed = 1;
-  led_update();
+  //led_update();
 }
