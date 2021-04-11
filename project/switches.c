@@ -5,7 +5,7 @@
 char switch_state_down, switch_state_changed; /* effectively boolean */
 
 char switch_state = 0;
-  
+char tempo = 0;  
 char button_clicks1, button_clicks2, button_clicks3, button_clicks4 = 0;
 
 

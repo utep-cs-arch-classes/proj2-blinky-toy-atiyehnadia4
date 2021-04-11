@@ -2,11 +2,13 @@
 #include "stateMachines.h"
 #include "switches.h"
 #include "led.h"
+#include "buzzer.h"
 
 unsigned char dim_state = 0;
 static char state;
 static char red = 0;
 static char red_speed = 0;
+static int song_counter = 0;
 
 void idle_state(){
   green_on = 0;
@@ -83,6 +85,12 @@ void change_red_button_clicks(int button){
   case 3:
     red = 2;
     break;
+  case 4:
+    red = 3;
+    break;
+  default:
+    red_solid_state();
+    break;
   }
 }
 
@@ -90,15 +98,40 @@ void red_dim_or_bright(){
   switch(red_speed){
   case 0:
     dim_state = 1;
-    red_speed = 1;
     red_blink_state();
-    break;
-  case 1:
     dim_state = 2;
     red_blink_state();
-    change_red_button_clicks(button_clicks1);
+    dim_state = 3;
+    red_blink_state();
+    dim_state = 1;
+    red_blink_state();
     break;
   }
+}
+
+void buzzer_song(){
+  switch(song_counter){
+  case 0:
+  case 1:
+  case 2:
+  case 4:
+    buzzer_set_period(750);
+    song_counter++;
+    break;
+  case 3:
+    buzzer_set_period(950);
+    song_counter++;
+    break;
+  case 5:
+    buzzer_set_period(630);
+    song_counter++;
+    break;
+  case 6:
+    buzzer_set_period(1260);
+    song_counter++;
+    break;
+  }
+
 }
 
 void red_state(){
@@ -112,15 +145,14 @@ void red_state(){
     change_red_button_clicks(button_clicks1);
     break;
   case 2:
-    red_dim_or_bright();
+    green_blink_state();
     change_red_button_clicks(button_clicks1);
     break;
   case 3:
-    green_blink_state();
-    //TODO BUZZER
-    break;    
-  default:
-    idle_state();
+    tempo = 50;
+    red_blink_state();
+    buzzer_song();
+    change_red_button_clicks(button_clicks1);
     break;
   } 
 }
