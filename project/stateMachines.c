@@ -1,28 +1,12 @@
 #include <msp430.h>
 #include "stateMachines.h"
+#include "switches.h"
 #include "led.h"
 
-void controller(int state){
-  char changed = 0;
-  switch(state){
-  case 1:
-    idle_state();
-    break;
-  case 2:
-    green_blink_state();
-    break;
-  case 3:
-    red_blink_state();
-    break;
-  case 4:
-    double_blink_state();
-    break;
-  }
-  changed = 1;
-  led_changed = changed;
-  led_update();
-  
-}
+unsigned char dim_state = 0;
+static char state;
+static char red = 0;
+static char red_speed = 0;
 
 void idle_state(){
   green_on = 0;
@@ -60,8 +44,9 @@ void red_blink_state(){
   }
 }
 
+
 void double_blink_state(){
-  static enum {R = 0, G = 1} color = R;
+  static enum {R = 0, G = 1} color = G;
   switch(color){
   case R:
     green_on = 1;
@@ -85,12 +70,70 @@ void green_solid_state(){
 
 void red_solid_state(){
   static enum {R = 1} color = R;
-  red_on = 1;
-  green_on = 0;
+  red_on = 0;
+  green_on = 1;
   color = R;
 }
 
-void state_advance()
-{
-  controller(2);
+void change_red_button_clicks(int button){
+  switch(button){
+  case 2:
+    red = 1;
+    break;
+  case 3:
+    red = 2;
+    break;
+  }
+}
+
+void red_dim_or_bright(){
+  switch(red_speed){
+  case 0:
+    dim_state = 1;
+    red_speed = 1;
+    red_blink_state();
+    break;
+  case 1:
+    dim_state = 2;
+    red_blink_state();
+    change_red_button_clicks(button_clicks1);
+    break;
+  }
+}
+
+void red_state(){
+  switch(red){
+  case 0:
+    red_solid_state();
+    change_red_button_clicks(button_clicks1);
+    break;
+  case 1:
+    red_blink_state();
+    change_red_button_clicks(button_clicks1);
+    break;
+  case 2:
+    red_dim_or_bright();
+    change_red_button_clicks(button_clicks1);
+    break;
+  case 3:
+    green_blink_state();
+    //TODO BUZZER
+    break;    
+  default:
+    idle_state();
+    break;
+  } 
+}
+
+void state_machine(){
+  char changed = 0;
+  switch(switch_state){
+  case 1:
+    red_state();
+    break;
+  }
+  
+  changed = 1;
+  led_changed = changed;
+  led_update();
 }

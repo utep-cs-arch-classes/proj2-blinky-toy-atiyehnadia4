@@ -1,7 +1,8 @@
 #ifndef stateMachine_included
 #define stateMachine_included
 
-void state_advance();
-void controller();
+extern unsigned char dim_state;
+
+void state_machine();
 
 #endif // included
