@@ -5,21 +5,15 @@ buttons on the MSP430 Expansion Board to perform these actions.
 
 ## Compiling and Running
    To compile my toy, I clean the directory by utilizing the
-   '''bash
    "make clean"
-   '''
    function made in the Makefile to ensure the most updated version of toy.elf
    is in the directory.
    After that I utilize the
-   '''bash
    "make"
-   '''
    fucntion to compile and run everything by
    generating the .elf files and .o files needed for running.
    The final step is to call
-   '''bash
    "make load"
-   '''
    which loads all the code onto the
    MSP430 and the toy is ready to play with!
 
@@ -42,9 +36,9 @@ buttons on the MSP430 Expansion Board to perform these actions.
    Button 3 has four functionalities.
    - 1 Click will show solid red and green leds
    - 2 Clicks will blink both the red and green LEDS
-   -3 Clicks plays the Mario Opening Theme while blinking both green and red
+   - 3 Clicks plays the Mario Opening Theme while blinking both green and red
    leds
-   -4 Clicks returns to the solid red and green lights.
+   - 4 Clicks returns to the solid red and green lights.
 
 ## Button 4
    Button 4 has four functionalities.
