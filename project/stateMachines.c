@@ -7,6 +7,8 @@
 static char red = 0;
 static char green = 0;
 static char both = 0;
+static char dim = 0;
+static char state = 0;
 static int red_song_counter = 0;
 static int green_song_counter = 0;
 static int both_song_counter = 0;
@@ -153,7 +155,6 @@ void red_button_state_machine(){
     change_red_button_clicks(button_clicks1);
     break;
   case 2:
-    tempo = 90;
     red_blink_state();
     red_buzzer_song();
     change_red_button_clicks(button_clicks1);
@@ -165,7 +166,7 @@ void red_button_state_machine(){
 }
 
 
- change_green_button_clicks(int button){
+void change_green_button_clicks(int button){
   switch(button){
   case 2:
     green = 1;
@@ -230,7 +231,6 @@ void green_button_state_machine(){
     change_green_button_clicks(button_clicks4);
     break;
   case 2:
-    tempo = 90;
     green_blink_state();
     green_buzzer_song();
     change_green_button_clicks(button_clicks4);
@@ -264,6 +264,7 @@ void both_buzzer_song(){
     break;
   }
 }
+
 void change_both_button_clicks(int button){
   switch(button){
   case 2:
@@ -284,48 +285,68 @@ void both_button_state_machine(){
   switch(both){
   case 0:
     double_solid_state();
-    change_both_button_clicks(button_clicks2);
+    change_both_button_clicks(button_clicks3);
     break;
   case 1:
     double_blink_state();
-    change_both_button_clicks(button_clicks2);
+    change_both_button_clicks(button_clicks3);
     break;
   case 2:
     double_blink_state();
     both_buzzer_song();
-    change_both_button_clicks(button_clicks2);
+    change_both_button_clicks(button_clicks3);
     break;
   }
 
   led_changed = 1;
   led_update();
 }
-  
-    
 
-//void dim_state_machine(){
-//char changed = 0;
-//switch(state){
+void dim_green(){
+  switch(dim){
+   case 0:
+     green_blink_state();
+     break;
+   case 1:
+     green_solid_state();
+     break;
+  }
+  led_changed = 1;
+  led_update();
+}
 
-//changed = 1;
-//led_changed = changed;
-//led_update();
-//}
+void dim_red(){
+  switch(dim){
+   case 0:
+     red_blink_state();
+     break;
+   case 1:
+     red_solid_state();
+     break;
+  }
+  led_changed = 1;
+  led_update();
+}
 
-//void change_state(){
-//if(state == 0){
-//  state = 1;
-//}
-// else if(state == 1){
-    //  state = 2;
-// }
-// else if(state == 2){
-//  state = 3;
-// }
-//  else if(state == 3){
-//  state = 4;
-// }
-// else{
-//  state = 0;
-//  }
+void dim_both(){
+  switch(dim){
+  case 0:
+    double_blink_state();
+    break;
+  case 1:
+    double_solid_state();
+    break;
+  }
+  led_changed = 1;
+  led_update();
+}
 
+void change_state(){
+  if(dim == 0){
+    dim = 1;
+  }
+  else if(dim == 1){
+      dim = 0;
+
+  }
+}
