@@ -345,8 +345,7 @@ void change_state(){
   if(dim == 0){
     dim = 1;
   }
-  else if(dim == 1){
-      dim = 0;
-
+  else{
+    dim = 0;
   }
 }

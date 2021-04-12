@@ -23,8 +23,9 @@ __interrupt_vec(WDT_VECTOR) WDT(){	/* 250 interrupts/sec */
   else if(blink_count == 2 && switch_state == 2){
     dim_both();
    
-    if(++state_count == 100){
-      change_state();
+    if(++state_count == 250){
+      // change_state();
+      change();
       state_count = 0;
     }
     blink_count = 0;
